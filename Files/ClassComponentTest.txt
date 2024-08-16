@@ -1,0 +1,45 @@
+
+
+import React from 'react';
+
+class MyHomePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      description: "",
+      imageSrc: ""
+    };
+  }
+
+  handleProductClick = (description, name, imageSrc) => {
+    this.setState({ description: description, name: name, imageSrc: imageSrc });
+  }
+
+  render() {
+    return (
+    <div style={{ display: "flex" }}>
+     <div style={{ flex: 1 }}>
+          <h1>All Products</h1>
+           <div>
+            <h3>Product 1</h3>
+            <img src={require("./images/photo_2024-01-03_14-11-37.jpg")} style={{width:"100px" , height:"200px"}} alt="Product 1"
+              onClick={() => this.handleProductClick("Description for Product 1", "Product1", "./images/photo_2024-01-03_14-11-37.jpg")} />
+          </div>
+          <div>
+            <h3>Product 1</h3>
+            <img src={require("./images/photo_2024-01-03_14-11-50.jpg")} style={{width:"100px" , height:"200px"}} alt="Product 2"
+              onClick={() => this.handleProductClick("Description for Product 2", "Product2", "./images/photo_2024-01-03_14-11-50.jpg")} />
+            </div>
+              <div style={{ flex: 1 }}>
+          <h1>Product Description</h1>
+          <p>{this.state.name}</p>
+          <p>{this.state.description}</p>
+          <img src={this.state.imageSrc}  alt="s" style={{width:"100px" , height:"200px"}}/>
+        </div>
+          </div>
+    </div>
+    );
+  }
+}
+export default MyHomePage ;

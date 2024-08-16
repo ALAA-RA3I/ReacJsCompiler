@@ -1,0 +1,56 @@
+
+import React, { useState } from 'react';
+
+function MyHomePage() {
+  const [productDetail,setProductDetail] = useState({
+    name: "",
+    description: "",
+    imageSrc: "",
+    title: ""
+  });
+
+
+
+  const  handleProductClick = (description, name, imageSrc, title) => {
+    setProductDetail({ description, name, imageSrc, title });
+  }
+
+
+
+
+  return (
+    <div style={{ display: "flex" }}>
+      <div style={{ flex: 1 }}>
+        <h1>All Products</h1>
+        <div>
+          <h3>Product 1</h3>
+          <img
+            src={require("./images/photo_2024-01-03_14-11-50.jpg")}
+            style={{width:"100px" , height:"200px"}}
+            alt="Product 1"
+            onClick={() => handleProductClick("Description for Product 1", "Product1", "./images/photo_2024-01-03_14-11-50.jpg", "title1")}
+          />
+        </div>
+        <div>
+          <h3>Product 2</h3>
+          <img
+            src={require("./images/photo_2024-01-03_14-11-37.jpg")}
+            style={{width:"100px" , height:"200px"}}
+            alt="Product 2"
+            onClick={() => handleProductClick("Description for Product 2", "Product2", "./images/photo_2024-01-03_14-11-37.jpg", "title2")}
+          />
+        </div>
+
+      </div>
+      <div style={{ flex: 1 }}>
+        <h1>Product Description</h1>
+        <p>{productDetail.name}</p>
+        <p>{productDetail.description}</p>
+        <p>{productDetail.title}</p>
+        <img src={productDetail.imageSrc} style={{width: "100px", height: "200px"}} alt="s" />
+      </div>
+    </div>
+  );
+}
+
+export default MyHomePage;
