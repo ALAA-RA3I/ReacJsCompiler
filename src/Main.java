@@ -21,7 +21,7 @@ public class Main {
         ParseTree ast = parser.program();
         ReactVisitor exampleVisitor = new ReactVisitor();
         Program program = (Program) exampleVisitor.visit(ast);
-        System.out.println(program);
+//        System.out.println(program);
     }
 }
 
