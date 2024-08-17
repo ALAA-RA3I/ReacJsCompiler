@@ -43,6 +43,9 @@ public class SemanticCheck {
         } else if (!checkForExport(this.symbolTable)) {
             System.out.println(ANSI_YELLOW + "some Thing not exported" + ANSI_RESET);
             return false;
+        } else if (!useUndeclareVariableinJsx(this.symbolTable)) {
+            System.out.println(ANSI_YELLOW + "some unDeclare variable is use it " + ANSI_RESET);
+            return false;
         }
         return true;
     }
@@ -203,6 +206,32 @@ public class SemanticCheck {
         return true;
     }
 
+    public boolean useUndeclareVariableinJsx(SymbolTable symbolTable){
+        Set <String> Declare_Variables = new HashSet<String>();
+        for (Row row : symbolTable.rows) {
+            if (row != null) {
+                String type = row.getType();
+                if (type.contains("variable_name")) {
+                    Declare_Variables.add(row.getValue());
+                }
+            }
+        }
+        for (int i = 0; i < symbolTable.rows.size(); i++) {
+            if (symbolTable.rows.get(i)!=null){
+                if (symbolTable.rows.get(i).getType().equals("Content_HTML_ELEMENT")) {
+                    String Variable = symbolTable.rows.get(i).getValue();
+                    if(Variable.contains("{") && Variable.contains("}") && !Variable.contains(".")){
+                        String Variable1 = symbolTable.rows.get(i).getValue().substring(1, symbolTable.rows.get(i).getValue().length()-1);
+                            if (!Declare_Variables.contains(Variable1)) {
+                                System.out.println(ANSI_RED + Variable1 + " that you use it is not declare " + ANSI_RESET);
+                                return false;
+                            }
+                    }
+                }
+            }
+        }
+        return  true;
+    }
     }
 
 

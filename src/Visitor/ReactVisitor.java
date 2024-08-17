@@ -409,13 +409,20 @@ return effect ;
 else if(ctx.expression() != null){
     jsxContent.setExpression(visitExpression(ctx.expression()));
 }
-        else {
+        else if(ctx.IDENTIFIER().size() > 1) {
             jsxContent.setProperty('{' + ctx.IDENTIFIER(0).getText() + '.' + ctx.IDENTIFIER(1).getText() + '}');
             Row row = new Row();
             row.setType("Content_HTML_ELEMENT");
             row.setValue('{' + ctx.IDENTIFIER(0).getText() + '.' + ctx.IDENTIFIER(1).getText() + '}');
             this.symbolTable.getRows().add(row);
 
+        }
+        else if (ctx.IDENTIFIER().size() == 1) {
+            jsxContent.setProperty('{' + ctx.IDENTIFIER(0).getText() + '}');
+            Row row = new Row();
+            row.setType("Content_HTML_ELEMENT");
+            row.setValue('{' + ctx.IDENTIFIER(0).getText() + '}');
+            this.symbolTable.getRows().add(row);
         }
         return  jsxContent;
     }

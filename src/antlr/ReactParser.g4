@@ -42,15 +42,16 @@ jsxTag : JSX_TAG jsxAttributes* CLOSE_TAG  jsxContent* JSX_CLOSE_TAG ;
 
 
 jsxAttributes : jsxAttribute
-              |jsxstyleAttribute
-              |jsxsrcAttribute
+              | jsxstyleAttribute
+              | jsxsrcAttribute
               ;
 
 
-jsxContent :  jsxElement
-           ////////////////
+jsxContent : jsxElement
            | expression
+           | O_CARLY IDENTIFIER  C_CARLY
            | O_CARLY IDENTIFIER POINT IDENTIFIER C_CARLY
+
            ;
 
 

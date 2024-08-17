@@ -7,7 +7,6 @@ import Reaact from 'react1';
 function MyHomePage() {
 
  var x = 10 ;
-
 let y = "alaa" ; 
 const m = asdd ;
 const z ; 
@@ -74,6 +73,7 @@ const withoutRef = useRef(asd);
         <p>{productDetail.name}</p>
         <p>{productDetail.description}</p>
         <p>{productDetail.title}</p>
+
         <img src={productDetail.imageSrc} style={{width: "100px", height: "200px"}} alt="s" />
       </div>
     </div>
