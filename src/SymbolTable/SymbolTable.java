@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SymbolTable {
 
-    List<Row> rows = new ArrayList<>();
+    public  List<Row> rows = new ArrayList<>();
 
 
     public List<Row> getRows() {

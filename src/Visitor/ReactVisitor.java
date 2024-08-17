@@ -1,6 +1,7 @@
 package Visitor;
 
 import AST.*;
+import Semantic.SemanticCheck;
 import SymbolTable.*;
 import gen.ReactParser;
 import gen.ReactParserBaseVisitor;
@@ -24,6 +25,9 @@ public class ReactVisitor extends ReactParserBaseVisitor {
         }
 
         this.symbolTable.print();
+        SemanticCheck semanticCheck = new SemanticCheck() ;
+        semanticCheck.setSymbolTable(this.symbolTable);
+        semanticCheck.check();
 
         return  p ;
     }
@@ -34,7 +38,7 @@ public class ReactVisitor extends ReactParserBaseVisitor {
         for (int i = 0; i < ctx.IDENTIFIER().size(); i++) {
             importStatment.getFramework_property().add(ctx.IDENTIFIER(i).getText());
             Row row = new Row();
-            row.setType("(lib|hooks)_Name");
+            row.setType("lib_hooks_Name");
             row.setValue(ctx.IDENTIFIER(i).getText());
             this.symbolTable.getRows().add(row);
         }
