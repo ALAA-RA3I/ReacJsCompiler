@@ -359,8 +359,10 @@ return effect ;
     @Override
     public JsxTag visitJsxTag(ReactParser.JsxTagContext ctx) {
         JsxTag jsxTag = new JsxTag() ;
-        String tag_name = ctx.JSX_TAG().getText().substring(1);
+        String tag_name = ctx.JSX_TAG().getText()+">";
         jsxTag.setJsx_tag(tag_name);
+        String tag_close_name = ctx.JSX_CLOSE_TAG().getText();
+        jsxTag.setJsx_close_tag(tag_close_name);
         for(int i =0 ; i < ctx.jsxAttributes().size() ; i++){
             if(ctx.jsxAttributes(i)!=null){
                 jsxTag.getJsxAttributes().add(visitJsxAttributes(ctx.jsxAttributes(i)));
@@ -375,6 +377,11 @@ return effect ;
         row.setType("Tag_Name");
         row.setValue(tag_name);
         this.symbolTable.getRows().add(row);
+        Row row1 = new Row() ;
+        row1.setType("Tag_Close_Name");
+        row1.setValue(tag_close_name);
+        this.symbolTable.getRows().add(row1);
+
         return  jsxTag ;
     }
 

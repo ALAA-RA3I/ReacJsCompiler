@@ -4,12 +4,22 @@ import java.util.ArrayList;
 
 public class JsxTag {
 String jsx_tag ;
+
+String jsx_close_tag ;
 ArrayList<JsxAttributes> jsxAttributes = new ArrayList<JsxAttributes>() ;
 
 ArrayList<JsxContent> jsxContents = new ArrayList<JsxContent>() ;
 
     public String getJsx_tag() {
         return jsx_tag;
+    }
+
+    public String getJsx_close_tag() {
+        return jsx_close_tag;
+    }
+
+    public void setJsx_close_tag(String jsx_close_tag) {
+        this.jsx_close_tag = jsx_close_tag;
     }
 
     public void setJsx_tag(String jsx_tag) {
