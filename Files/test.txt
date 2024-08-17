@@ -4,7 +4,8 @@ import Re from 'react1';
 
 function MyHomePage() {
 
- var x = 10 ; 
+ var x = 10 ;
+
 let y = "alaa" ; 
 const m = asdd ;
 const z ; 
@@ -34,6 +35,7 @@ const withoutRef = useRef(asd);
   const  handleProductClick = (description, name, imageSrc, title) => {
     setProductDetail({ description, name, imageSrc, title });
   }
+
   const  handleStateTwo = (zxczxc) => {
     setProductDetail2("stateTrow");
   }

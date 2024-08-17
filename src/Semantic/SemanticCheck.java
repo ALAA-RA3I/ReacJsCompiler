@@ -23,9 +23,19 @@ public class SemanticCheck {
         if (checkIfHooksImport(this.symbolTable) == false) {
             System.out.println(ANSI_RED + "some hooks used in code but not import above" + ANSI_RESET);
             return false;
+        } else if (!checkForRedublicationVariable(this.symbolTable)) {
+            System.out.println(ANSI_RED + "some variables are redublicated" + ANSI_RESET);
+            return false;
+        } else if (!checkForRedublicationFunction(this.symbolTable)) {
+            System.out.println(ANSI_RED + "some function are redublicated" + ANSI_RESET);
+            return false;
+        } else if (!checkForExport(this.symbolTable)) {
+            System.out.println(ANSI_RED + "some " + ANSI_RESET);
+            return false;
         }
         return true;
     }
+
     public boolean checkIfHooksImport(SymbolTable symbolTable) {
         // Set to store all used hooks in the code
         Set<String> usedHooks = new HashSet<>();
@@ -59,11 +69,62 @@ public class SemanticCheck {
 
         return true;  // All used hooks are properly imported
     }
- }
 
-//    public boolean duplicateImportComponent(){
-//
-//    }
+    public boolean checkForRedublicationVariable(SymbolTable symbolTable) {
+        for (int i = 0; i < symbolTable.rows.size(); i++) {
+            if (symbolTable.rows.get(i)!=null){
+                if (symbolTable.rows.get(i).getType().equals("variable_name")) {
+                    String Variable = symbolTable.rows.get(i).getValue();
+                    for (int j=symbolTable.rows.size()-1;j>i; j--){
+                        if (symbolTable.rows.get(j).getType().equals("variable_name")){
+                            if (Variable.equals(symbolTable.rows.get(j).getValue())){
+                                return false ;
+                            }
+                        }
+                    }
+                }
+                }
+            }
+        return  true;
+        }
+        public boolean checkForRedublicationFunction(SymbolTable symbolTable){
+            for (int i = 0; i < symbolTable.rows.size(); i++) {
+                if (symbolTable.rows.get(i)!=null){
+                    if (symbolTable.rows.get(i).getType().equals("Handler_Method_Name")) {
+                        String Variable = symbolTable.rows.get(i).getValue();
+                        for (int j=symbolTable.rows.size()-1;j>i; j--){
+                            if (symbolTable.rows.get(j).getType().equals("Handler_Method_Name")){
+                                if (Variable.equals(symbolTable.rows.get(j).getValue())){
+                                    return false ;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        return true;
+        }
+
+        public boolean checkForExport(SymbolTable symbolTable){
+            for (int i = 0; i<symbolTable.rows.size(); i++ ){
+                if (symbolTable.rows.get(i)!=null) {
+                    if (symbolTable.rows.get(i).getType().equals("MainFunction_Name")) {
+                        String Variable = symbolTable.rows.get(i).getValue();
+                        for (int j=0;j<symbolTable.rows.size();j++){
+                            if (symbolTable.rows.get(j).getType().equals("component_exported")){
+                                if (!Variable.equals(symbolTable.rows.get(j).getValue())){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }return true;
+        }
+    }
+
+
+
 
 
 
