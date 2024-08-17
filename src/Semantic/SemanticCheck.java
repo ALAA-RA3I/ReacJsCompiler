@@ -27,21 +27,21 @@ public class SemanticCheck {
             System.out.println(ANSI_YELLOW + "some hooks used in code but not import above" + ANSI_RESET);
             return false;
         }
-        if (!duplicateImportComponent(this.symbolTable)) {
+       else if (!duplicateImportComponent(this.symbolTable)) {
             System.out.println(ANSI_YELLOW + "Some Component Duplicate Imported" + ANSI_RESET);
             return false;
         }
-        if (!checkUnmatchedOpeningTags(this.symbolTable)) {
+       else if (!checkUnmatchedOpeningTags(this.symbolTable)) {
             System.out.println(ANSI_YELLOW + "ٍSome Tage not process correctly " + ANSI_RESET);
             return false;
         } else if (!checkForRedublicationVariable(this.symbolTable)) {
-            System.out.println(ANSI_RED + "some variables are redublicated" + ANSI_RESET);
+            System.out.println(ANSI_YELLOW + "some variables are redublicated" + ANSI_RESET);
             return false;
         } else if (!checkForRedublicationFunction(this.symbolTable)) {
-            System.out.println(ANSI_RED + "some function are redublicated" + ANSI_RESET);
+            System.out.println(ANSI_YELLOW + "some function are redublicated" + ANSI_RESET);
             return false;
         } else if (!checkForExport(this.symbolTable)) {
-            System.out.println(ANSI_RED + "some " + ANSI_RESET);
+            System.out.println(ANSI_YELLOW + "some Thing not exported" + ANSI_RESET);
             return false;
         }
         return true;
@@ -83,6 +83,7 @@ public class SemanticCheck {
                     for (int j=symbolTable.rows.size()-1;j>i; j--){
                         if (symbolTable.rows.get(j).getType().equals("variable_name")){
                             if (Variable.equals(symbolTable.rows.get(j).getValue())){
+                                System.out.println(ANSI_RED + Variable + " is  already define as variable with same name" + ANSI_RESET);
                                 return false ;
                             }
                         }
@@ -96,10 +97,11 @@ public class SemanticCheck {
             for (int i = 0; i < symbolTable.rows.size(); i++) {
                 if (symbolTable.rows.get(i)!=null){
                     if (symbolTable.rows.get(i).getType().equals("Handler_Method_Name")) {
-                        String Variable = symbolTable.rows.get(i).getValue();
+                        String Method = symbolTable.rows.get(i).getValue();
                         for (int j=symbolTable.rows.size()-1;j>i; j--){
                             if (symbolTable.rows.get(j).getType().equals("Handler_Method_Name")){
-                                if (Variable.equals(symbolTable.rows.get(j).getValue())){
+                                if (Method.equals(symbolTable.rows.get(j).getValue())){
+                                    System.out.println(ANSI_RED + Method + " is already define as Method with same name " + ANSI_RESET);
                                     return false ;
                                 }
                             }
@@ -111,21 +113,30 @@ public class SemanticCheck {
         }
 
         public boolean checkForExport(SymbolTable symbolTable){
-            for (int i = 0; i<symbolTable.rows.size(); i++ ){
-                if (symbolTable.rows.get(i)!=null) {
-                    if (symbolTable.rows.get(i).getType().equals("MainFunction_Name")) {
-                        String Variable = symbolTable.rows.get(i).getValue();
-                        for (int j=0;j<symbolTable.rows.size();j++){
-                            if (symbolTable.rows.get(j).getType().equals("component_exported")){
-                                if (!Variable.equals(symbolTable.rows.get(j).getValue())){
-                                    return false;
-                                }
-                            }
-                        }
+        Set <String> exportedComponent = new HashSet<String>();
+            Set <String> mainFunction = new HashSet<String>();
+
+            for (Row row : symbolTable.rows) {
+                if (row != null) {
+                    String type = row.getType();
+                    if (type.contains("component_exported")) {
+                        exportedComponent.add(row.getValue());
+                    }
+                    if (type.contains("MainFunction_Name")) {
+                        mainFunction.add(row.getValue());
                     }
                 }
-            }return true;
-        }
+            }
+            for (String function : mainFunction) {
+                if (!exportedComponent.contains(function)) {
+                    System.out.println(ANSI_RED + function + " Not Exported " + ANSI_RESET);
+                    return false;
+                }
+            }
+            return true;
+
+                      }
+
     public boolean duplicateImportComponent(SymbolTable symbolTable) {
         for (int i = 0 ; i < symbolTable.rows.size() ; i++) {
             if (symbolTable.rows.get(i) != null) {

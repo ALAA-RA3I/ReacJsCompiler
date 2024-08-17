@@ -3,6 +3,7 @@ import React, {useState,useRef,useEffect} from 'react';
 import Re from 'react1';
 import Reaact from 'react1';
 
+
 function MyHomePage() {
 
  var x = 10 ;
@@ -79,4 +80,3 @@ const withoutRef = useRef(asd);
   );
 }
 export default MyHomePage;
-export default Re;
