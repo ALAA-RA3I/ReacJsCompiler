@@ -12,8 +12,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-//      String source = "Files/ClassComponentTest.txt";
-        String source = "Files/test.txt";
+//      String source = "Files/test.txt";
+        String source = "Files/FunctionalComponentTest1.txt";
         CharStream charstream = CharStreams.fromFileName(source);
         ReactLexer lexer = new ReactLexer(charstream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
