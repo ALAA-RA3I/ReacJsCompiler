@@ -4,59 +4,100 @@ import SymbolTable.SymbolTable;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CodeGenerate {
     SymbolTable symbolTable ;
+    String Html = "";
+
     String FileName ;
 
-    String Html = "<!DOCTYPE html>\n" +
-            "<html lang=\"en\">\n" +
-            "<head>\n" +
-            "    <meta charset=\"UTF-8\">\n" +
-            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
-            "    <title>Product Page</title>\n" +
-            "    <style>\n" +
-            "        .container {\n" +
-            "            display: flex;\n" +
-            "        }\n" +
-            "        .left-side {\n" +
-            "            flex: 1;\n" +
-            "        }\n" +
-            "        .right-side {\n" +
-            "            flex: 1;\n" +
-            "        }\n" +
-            "        img {\n" +
-            "            width: 300px;\n" +
-            "            height: 200px;\n" +
-            "        }\n" +
-            "    </style>\n" +
-            "</head>\n" +
-            "<body>\n" +
-            "\n" +
-            "    <div class=\"container\">\n" +
-            "        <div class=\"left-side\">\n" +
-            "            <h1>All Products</h1>\n" +
-            "            <div>\n" +
-            "                <h3>Product 1</h3>\n" +
-            "                <img id=\"product1-img\" src=\"./images/OIP (1).jpg\" alt=\"Product 1\" />\n" +
-            "            </div>\n" +
-            "            <div>\n" +
-            "                <h3>Product 2</h3>\n" +
-            "                <img id=\"product2-img\" src=\"./images/OIP.jpg\" alt=\"Product 2\" />\n" +
-            "            </div>\n" +
-            "        </div>\n" +
-            "        <div class=\"right-side\">\n" +
-            "            <h1>Product Description</h1>\n" +
-            "            <p id=\"product-name\"></p>\n" +
-            "            <p id=\"product-description\"></p>\n" +
-            "            <p id=\"product-title\"></p>\n" +
-            "        </div>\n" +
-            "    </div>\n" +
-            "\n" +
-            "    <script src=\"script.js\"></script>\n" +
-            "\n" +
-            "</body>\n" +
-            "</html>";
+    public void generateHtml(SymbolTable symbolTable) {
+            List<String> productNames = new ArrayList<>();
+            List<String> imagePaths = new ArrayList<>();
+            StringBuilder dynamicHtml = new StringBuilder(); // لتجميع كود HTML
+
+            // بداية كود الـ HTML
+            dynamicHtml.append("<!DOCTYPE html>\n")
+                    .append("<html lang=\"en\">\n")
+                    .append("<head>\n")
+                    .append("    <meta charset=\"UTF-8\">\n")
+                    .append("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n")
+                    .append("    <title>Product Page</title>\n")
+                    .append("    <style>\n")
+                    .append("        .container {\n")
+                    .append("            display: flex;\n")
+                    .append("        }\n")
+                    .append("        .left-side {\n")
+                    .append("            flex: 1;\n")
+                    .append("        }\n")
+                    .append("        .right-side {\n")
+                    .append("            flex: 1;\n")
+                    .append("        }\n")
+                    .append("        img {\n")
+                    .append("            width: 300px;\n")
+                    .append("            height: 200px;\n")
+                    .append("        }\n")
+                    .append("    </style>\n")
+                    .append("</head>\n")
+                    .append("<body>\n")
+                    .append("    <div class=\"container\">\n")
+                    .append("        <div class=\"left-side\">\n")
+                    .append("            <h1>All Products</h1>\n");
+
+            // جمع أسماء المنتجات
+            for (int i = 0; i < symbolTable.rows.size(); i++) {
+                if (symbolTable.rows.get(i) != null) {
+                    if (symbolTable.rows.get(i).getType().contains("variable_value")) {
+                        productNames.add(symbolTable.rows.get(i).getValue());
+                    }
+                }
+            }
+
+            // جمع مسارات الصور
+            for (int i = 0; i < symbolTable.rows.size(); i++) {
+                if (symbolTable.rows.get(i) != null) {
+                    if (symbolTable.rows.get(i).getType().contains("ImgSrcValue")) {
+                        imagePaths.add(symbolTable.rows.get(i).getValue());
+                    }
+                }
+            }
+
+            // بناء الـ HTML باستخدام القيم التي تم جمعها
+            for (int i = 0; i < productNames.size(); i++) {
+                String productName = productNames.get(i);
+                String imagePath = i < imagePaths.size() ? imagePaths.get(i) : "";
+
+                dynamicHtml.append("<div>\n")
+                        .append("<h3>").append(productName).append("</h3>\n")
+                        .append("<img id=\"").append(productName.toLowerCase().replace(" ", "-"))
+                        .append("-img\" src=\"")
+                        .append(imagePath)
+                        .append("\" alt=\"")
+                        .append(productName)
+                        .append("\"/>\n")
+                        .append("</div>\n");
+            }
+
+            // إكمال الـ HTML
+            dynamicHtml.append("        </div>\n")
+                    .append("        <div class=\"right-side\">\n")
+                    .append("            <h1>Product Description</h1>\n")
+                    .append("            <p id=\"product-name\"></p>\n")
+                    .append("            <p id=\"product-description\"></p>\n")
+                    .append("            <p id=\"product-title\"></p>\n")
+                    .append("        </div>\n")
+                    .append("    </div>\n")
+                    .append("\n")
+                    .append("    <script src=\"script.js\"></script>\n")
+                    .append("\n")
+                    .append("</body>\n")
+                    .append("</html>");
+
+            // تخزين الـ HTML النهائي في المتغير Html
+            this.Html = dynamicHtml.toString();
+        }
 
 /////////////// js /////////////////////
     String JavaScript = "" ;
@@ -74,6 +115,7 @@ public CodeGenerate(SymbolTable symbolTable){
     public void generate(){
         PrintWriter printWriter ;
         PrintWriter printWriter1 ;
+        generateHtml(this.symbolTable);
         this.Property(this.symbolTable);
         this.Method(this.symbolTable);
         this.Handler_Method(this.symbolTable);
@@ -171,7 +213,6 @@ public void Property(SymbolTable symbolTable){
                     "\n ";
         }
     }
-
 
     public SymbolTable getSymbolTable() {
         return symbolTable;
