@@ -1,6 +1,7 @@
 package Visitor;
 
 import AST.*;
+import GenerateCode.CodeGenerate;
 import Semantic.SemanticCheck;
 import SymbolTable.*;
 import gen.ReactParser;
@@ -9,7 +10,7 @@ import gen.ReactParserBaseVisitor;
 import java.util.ArrayList;
 
 public class ReactVisitor extends ReactParserBaseVisitor {
-    SymbolTable symbolTable = new SymbolTable() ;
+ public    SymbolTable symbolTable = new SymbolTable() ;
     private String classname ;
     private ArrayList<String> method_names = new ArrayList<String>();
 

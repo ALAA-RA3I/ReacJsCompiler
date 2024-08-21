@@ -1,4 +1,5 @@
 import AST.Program;
+import GenerateCode.CodeGenerate;
 import Visitor.ReactVisitor;
 import gen.ReactLexer;
 import gen.ReactParser;
@@ -21,6 +22,9 @@ public class Main {
         ParseTree ast = parser.program();
         ReactVisitor exampleVisitor = new ReactVisitor();
         Program program = (Program) exampleVisitor.visit(ast);
+        CodeGenerate codeGenerate = new CodeGenerate(exampleVisitor.symbolTable);
+        codeGenerate.generate();
+
 //        System.out.println(program);
     }
 }
